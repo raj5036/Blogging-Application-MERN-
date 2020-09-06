@@ -20,7 +20,7 @@ function SignIn() {
                     </div>
                 </fieldset>
                 <div className="mt3">
-                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Sign In" onClick={()=>{route.onRouteChange('home');isSignedIn.setIsSignedIn(true)}}/>
+                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Sign In" onClick={()=>{route.setRoute('home');isSignedIn.setIsSignedIn(true)}}/>
                 </div>
               </form>
           </article>

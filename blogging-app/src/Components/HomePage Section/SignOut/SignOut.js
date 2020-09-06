@@ -1,9 +1,14 @@
-import React from 'react'
+import React,{useContext} from 'react';
+import {routeContext,isSignedInContext} from '../../../App'; 
 
-function SignOut({onRouteChange,setIsSignedIn}) {
+function SignOut() {
+
+    const route=useContext(routeContext);
+    const isSignedIn=useContext(isSignedInContext);
+
     return (
         <div>
-            <button onClick={()=>{onRouteChange('signin');setIsSignedIn(false)}}>SignOut</button>
+            <button onClick={()=>{route.setRoute('signin');isSignedIn.setIsSignedIn(false)}}>SignOut</button>
         </div>
     )
 }
