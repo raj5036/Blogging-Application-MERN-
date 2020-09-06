@@ -1,6 +1,9 @@
-import React from 'react'
+import React,{useContext} from 'react';
+import {routeContext,isSignedInContext} from '../../../App';
 
-function SignIn({onRouteChange,setIsSignedIn}) {
+function SignIn() {
+    const route=useContext(routeContext);
+    const isSignedIn=useContext(isSignedInContext);
     return (
         <div>
             <article className="pa4 black-80">
@@ -17,7 +20,7 @@ function SignIn({onRouteChange,setIsSignedIn}) {
                     </div>
                 </fieldset>
                 <div className="mt3">
-                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Sign In" onClick={()=>{onRouteChange('home');setIsSignedIn(true)}}/>
+                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Sign In" onClick={()=>{route.onRouteChange('home');isSignedIn.setIsSignedIn(true)}}/>
                 </div>
               </form>
           </article>

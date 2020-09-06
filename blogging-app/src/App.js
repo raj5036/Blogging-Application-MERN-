@@ -1,31 +1,22 @@
 import React,{useState} from 'react';
 import './App.css';
-import Register from './Components/Navigation/Register/Register';
-import SignIn from './Components/Navigation/SignIn/SignIn';
-import SignOut from './Components/HomePage Section/SignOut/SignOut';
+import NavBar from './Components/Navigation/Navbar/Navbar';
 
+export const routeContext=React.createContext();
+export const isSignedInContext=React.createContext();
 const App=()=>  {
   const [isSignedIn,setIsSignedIn]=useState(false);
   const [route,setRoute]=useState('signin');
 
-  const onRouteChange=(route)=>{
-    setRoute(route);
-  }
   console.log(isSignedIn);
 
-  if(route==='signin')
-      return (
-        <div className="App">
-          <Register onRouteChange={onRouteChange} setIsSignedIn={setIsSignedIn}/>
-          <SignIn onRouteChange={onRouteChange} setIsSignedIn={setIsSignedIn}/>
-        </div>
-      );
-  else
-      return(
-          <div>
-            <SignOut onRouteChange={onRouteChange} setIsSignedIn={setIsSignedIn}/>
-          </div>
-      );
+  return(
+      <routeContext.Provider value={{route,setRoute}}>
+        <isSignedInContext.Provider value={{isSignedIn,setIsSignedIn}}>
+            <NavBar />
+        </isSignedInContext.Provider>
+      </routeContext.Provider>
+  );
 }
 
 export default App;
