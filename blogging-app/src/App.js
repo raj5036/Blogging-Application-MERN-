@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{useState} from 'react';
 import './App.css';
+import Register from './Components/Navigation/Register/Register';
+import SignIn from './Components/Navigation/SignIn/SignIn';
+import SignOut from './Components/HomePage Section/SignOut/SignOut';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App=()=>  {
+  const [isSignedIn,setIsSignedIn]=useState(false);
+  const [route,setRoute]=useState('signin');
+
+  const onRouteChange=(route)=>{
+    setRoute(route);
+  }
+  console.log(isSignedIn);
+
+  if(route==='signin')
+      return (
+        <div className="App">
+          <Register onRouteChange={onRouteChange} setIsSignedIn={setIsSignedIn}/>
+          <SignIn onRouteChange={onRouteChange} setIsSignedIn={setIsSignedIn}/>
+        </div>
+      );
+  else
+      return(
+          <div>
+            <SignOut onRouteChange={onRouteChange} setIsSignedIn={setIsSignedIn}/>
+          </div>
+      );
 }
 
 export default App;
