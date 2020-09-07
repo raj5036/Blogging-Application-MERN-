@@ -1,5 +1,9 @@
 const express=require('express');
 const router=express.Router();
+const mongoose=require('mongoose');
+
+//Bring in PostSchema
+let Post=require('../Models/post');
 
 const Blogs=[
     {
@@ -33,50 +37,72 @@ const Blogs=[
 ];
 //Show all posts
 router.get('/',(req,res)=>{
-    res.status(200).json(Blogs);
+    Post.find({},(error,posts)=>{
+        if(error){
+            console.log(error);
+        }
+        else{
+            res.status(200).json(posts);
+        }
+    });
 });
 
 //Show post by id
 router.get('/:id',(req,res)=>{
-    let found = Blogs.some(blog=> blog.id===parseInt(req.params.id));
-    if(!found){
-        return res.status(400).json({msg : `no such blog with id ${req.params.id}`});
-    }
-    else{
-        res.status(200).json(Blogs.filter(blog=> blog.id===parseInt(req.params.id)));
-    }
+    Post.findById(req.params.id,(error,post)=>{
+        if(error) throw new Error(error);
+        console.log(post);
+        return res.status(200).json({msg : `request successful`});
+    
+    });
 });
 
 //Add Post
 router.post('/',(req,res)=>{
-    const newBlog={
-        id:req.body.id,
-        title:req.body.title,
-        body: req.body.body,
-        author:req.body.author,
-        date:new Date()
-    }
-    if(!newBlog.title || !newBlog.body){
+    let post=new Post();
+    post.title=req.body.title;
+    post.body=req.body.body;
+    post.author=req.body.author;
+  
+    if(!post.title || !post.body){
         return res.status(400).json({msg : "Blog should have a title and a body"});
     }
-    Blogs.push(newBlog);
-    res.status(200).json(Blogs);
+
+    console.log(post);
+    post.save((err)=>{
+        if(err) throw new Error(err);
+        else{
+            res.status(200);
+        }
+    });
+    res.end();
 });
 
 //Update an existing post
 router.put('/:id',(req,res)=>{
-    let found=Blogs.some(blog=>blog.id===parseInt(req.params.id));
-    console.log(found,`for update`);
-    if(!found){
-        return res.status(400).json({msg : `No such post exists`});
-    }
-
-    Blogs.forEach(blog=>{
-        blog.title= req.body.title;
-        blog.body=req.body.body;
-        date=new Date();
+    //let found=Blogs.some(blog=>blog.id===parseInt(req.params.id));
+    let post={};
+    post.id=parseInt(req.params.id);
+    post.title=req.body.title;
+    post.body=req.body.body;
+    let query={_id : req.params.id}
+    Post.updateOne(query,post,(err)=>{
+        if(!err){
+            console.log(post);
+        }
     });
-    res.status(200).json(Blogs);
+    res.json(post);
+    // console.log(found,`for update`);
+    // if(!found){
+    //     return res.status(400).json({msg : `No such post exists`});
+    // }
+
+    // Blogs.forEach(blog=>{
+    //     blog.title= req.body.title;
+    //     blog.body=req.body.body;
+    //     date=new Date();
+    // });
+    // res.status(200).json(Blogs);
     res.end();
 });
 

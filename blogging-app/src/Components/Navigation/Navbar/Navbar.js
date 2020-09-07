@@ -1,6 +1,6 @@
 import React,{useContext} from 'react'
 import { Navbar,Nav,Form } from 'react-bootstrap';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+//import NavDropdown from 'react-bootstrap/NavDropdown';
 import Routing from '../Routing/Routing';
 import {actionContext} from '../../../App';
 
@@ -17,7 +17,7 @@ function NavBar() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
+                <Nav.Link href="#home" onClick={()=>{actionContextReturns.setAction('read')}}>Home</Nav.Link>
                 <Nav.Link href="#create" onClick={()=>{actionContextReturns.setAction('create')}}>Create a Post</Nav.Link>
                 <Nav.Link href="#update" onClick={()=>{actionContextReturns.setAction('update')}}>update a Post</Nav.Link>
                 <Nav.Link href="#delete" onClick={()=>{actionContextReturns.setAction('delete')}}>delete a Post</Nav.Link>
