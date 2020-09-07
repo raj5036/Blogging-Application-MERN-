@@ -7,6 +7,9 @@ function Register() {
     const isSignedIn=useContext(isSignedInContext);
     const route=useContext(routeContext);
 
+    console.log(`routeContext returns ${route}`);
+    console.log(`isSignedInContext returns ${isSignedIn}`);
+
     return (
         <div>
           <article className="pa4 black-80">
