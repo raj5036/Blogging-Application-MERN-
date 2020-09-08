@@ -1,13 +1,17 @@
-import React,{useState,useEffect,useContext} from 'react';
+import React,{useState,useContext} from 'react';
 import axios from 'axios';
-import {actionContext} from '../../../App';
+import {actionContext,postIDContext} from '../../../App';
+
 
 function Post() {
     const [posts,setPosts]=useState([]);
 
     const actionContextReturns=useContext(actionContext);
+    const postIDContextReturns=useContext(postIDContext);
 
-    useEffect(()=>{
+    //let url=`http://localhost:3001/api/posts/${postIDContextReturns.id}`
+    const fetchData=()=>{
+        
         axios.default.get("http://localhost:3001/api/posts/")
         .then(response=>{
             //console.log(response);
@@ -16,24 +20,29 @@ function Post() {
         .catch(error=>{
             console.log(error);
         });
-    },[]);
+        
+    };
+    fetchData();
 
-    return (
-        <div>
-            <ul>
-                {
-                    posts.map(post=>{
-                        return (
-                            <li key={post._id}>
-                                <a href={`http://localhost:3001/api/posts/${post._id}`} onClick={()=>actionContextReturns.setAction('readOne')}>{post.title}</a>
-                                <p>{post.body}</p>
-                            </li>
-                        );
-                    })
-                }
-            </ul>
-        </div>
-    )
+        return (
+            <div>
+                <ul>
+                    {
+                        posts.map(post=>{
+                            return (
+                                <div>
+                                        <li key={post._id}>
+                                        <h2 className="pointer grow blue" onClick={()=>{actionContextReturns.setAction('readOne');postIDContextReturns.setPostID(post._id);console.log(post._id)}}>
+                                            {post.title}
+                                        </h2>
+                                    </li>
+                                </div>
+                            );
+                        })
+                    }
+                </ul>
+            </div>
+        )
 }
 
 export default Post
