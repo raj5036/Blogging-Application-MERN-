@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 
 function AddPost() {
     const [title,setTitle] = useState("");
@@ -10,9 +10,7 @@ function AddPost() {
         e.preventDefault();
         console.log(title);
         console.log(body);
-        axios.post("https://jsonplaceholder.typicode.com/posts/",{
-            id : uuidv4(),
-            userid : uuidv4(),
+        axios.post("http://localhost:3001/api/posts/",{
             title : title,
             body : body,
         })

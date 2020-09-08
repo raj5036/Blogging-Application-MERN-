@@ -1,11 +1,14 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import axios from 'axios';
+import {actionContext} from '../../../App';
 
 function Post() {
     const [posts,setPosts]=useState([]);
 
+    const actionContextReturns=useContext(actionContext);
+
     useEffect(()=>{
-        axios.default.get("https://jsonplaceholder.typicode.com/posts")
+        axios.default.get("http://localhost:3001/api/posts/")
         .then(response=>{
             //console.log(response);
             setPosts(response.data);
@@ -21,8 +24,8 @@ function Post() {
                 {
                     posts.map(post=>{
                         return (
-                            <li key={post.id}>
-                                <h1>{post.title}</h1>
+                            <li key={post._id}>
+                                <a href={`http://localhost:3001/api/posts/${post._id}`} onClick={()=>actionContextReturns.setAction('readOne')}>{post.title}</a>
                                 <p>{post.body}</p>
                             </li>
                         );

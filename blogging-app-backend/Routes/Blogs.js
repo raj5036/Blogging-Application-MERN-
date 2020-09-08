@@ -4,6 +4,7 @@ const mongoose=require('mongoose');
 
 //Bring in PostSchema
 let Post=require('../Models/post');
+const { response } = require('express');
 
 const Blogs=[
     {
@@ -52,8 +53,11 @@ router.get('/:id',(req,res)=>{
     Post.findById(req.params.id,(error,post)=>{
         if(error) throw new Error(error);
         console.log(post);
-        return res.status(200).json({msg : `request successful`});
-    
+        res.status(200).send(`
+            <h1>${post.title}</h1>
+            <p>${post.body}</p>
+        `);
+        
     });
 });
 
@@ -62,59 +66,37 @@ router.post('/',(req,res)=>{
     let post=new Post();
     post.title=req.body.title;
     post.body=req.body.body;
-    post.author=req.body.author;
+    post.author="Raj";
   
     if(!post.title || !post.body){
         return res.status(400).json({msg : "Blog should have a title and a body"});
     }
 
     console.log(post);
-    post.save((err)=>{
-        if(err) throw new Error(err);
-        else{
-            res.status(200);
-        }
-    });
+    post.save();
     res.end();
 });
 
 //Update an existing post
 router.put('/:id',(req,res)=>{
-    //let found=Blogs.some(blog=>blog.id===parseInt(req.params.id));
-    let post={};
-    post.id=parseInt(req.params.id);
-    post.title=req.body.title;
-    post.body=req.body.body;
-    let query={_id : req.params.id}
-    Post.updateOne(query,post,(err)=>{
+    let query={_id : req.params.id};
+    Post.update(query,{title : req.body.title, body : req.body.body},(err,log)=>{
         if(!err){
-            console.log(post);
+            console.log(log);
         }
-    });
-    res.json(post);
-    // console.log(found,`for update`);
-    // if(!found){
-    //     return res.status(400).json({msg : `No such post exists`});
-    // }
-
-    // Blogs.forEach(blog=>{
-    //     blog.title= req.body.title;
-    //     blog.body=req.body.body;
-    //     date=new Date();
-    // });
-    // res.status(200).json(Blogs);
-    res.end();
+        res.end();
+    })
 });
 
 //Delete and exisiting post
 router.delete('/:id',(req,res)=>{
-    let found=Blogs.some(blog=>blog.id===parseInt(req.params.id));
-    console.log(found,`for delete`);
-    if(!found){
-        return res.status(400).json({msg : `No such post exists`});
-    }
-    res.status(200).json(Blogs.filter(blog=>blog.id !== parseInt(req.params.id)));
-    res.end();
+    let query={_id:req.params.id};
+    Post.findOneAndRemove(query,(err,response)=>{
+        if(!err){
+            console.log(response);
+        }
+        res.end();
+    });
 });
 
 module.exports=router;

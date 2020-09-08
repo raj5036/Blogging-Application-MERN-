@@ -1,6 +1,7 @@
-import React,{useContext} from 'react';
+import React,{useState,useContext} from 'react';
 import './Register.css';
 import {routeContext,isSignedInContext} from '../../../App';
+import axios from 'axios';
 
 function Register() {
 
@@ -10,27 +11,42 @@ function Register() {
     console.log(`routeContext returns ${route}`);
     console.log(`isSignedInContext returns ${isSignedIn}`);
 
+    const [name,setName]=useState("");
+    const [email,setEmail]=useState("");
+    const [password,setPassword]=useState("");
+
+    const onSubmitHandler=e=>{
+        axios.post("http://localhost:3001/api/users/register",{
+            name:name,
+            email:email,
+            password:password,
+        })
+        .then(response=>console.log(response))
+        .catch(err=>console.log(err));
+    }
+
     return (
         <div>
+            <h1>wgehwqiehijqwheihioqw</h1>
           <article className="pa4 black-80">
-              <form action="sign-up_submit" method="get" acceptCharset="utf-8">
+              <form onSubmit={onSubmitHandler} method="post" acceptCharset="utf-8">
                 <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                    <legend className="ph0 mh0 fw6 clip">Sign Up</legend>
+                    <legend className="ph0 mh0 fw6 clip">Register</legend>
                     <div className="mt3">
                         <label className="db fw4 lh-copy f6" htmlFor="name">Name</label>
-                        <input className="pa2 input-reset ba bg-transparent w-100 measure" type="text" name="name" autoComplete="on"/>
+                        <input className="pa2 input-reset ba bg-transparent w-100 measure" type="text" autoComplete="on" value={name} onChange={e=>setName(e.target.value)}/>
                     </div>
                     <div className="mt3">
                         <label className="db fw4 lh-copy f6" htmlFor="email-address">Email address</label>
-                        <input className="pa2 input-reset ba bg-transparent w-100 measure" type="email" name="email" autoComplete="on"/>
+                        <input className="pa2 input-reset ba bg-transparent w-100 measure" type="email" autoComplete="on" value={email} onChange={e=>setEmail(e.target.value)}/>
                     </div>
                     <div className="mt3">
                         <label className="db fw4 lh-copy f6" htmlFor="email-address">Password</label>
-                        <input className="pa2 input-reset ba bg-transparent w-100 measure" type="password" name="password" autoComplete="on" />
+                        <input className="pa2 input-reset ba bg-transparent w-100 measure" type="password" autoComplete="on" value={password} onChange={e=>setPassword(e.target.value)}/>
                     </div>
                 </fieldset>
                 <div className="mt3">
-                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Sign Up" onClick={()=>{route.setRoute('home');isSignedIn.setIsSignedIn(true)}}/>
+                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Register" onClick={()=>{route.setRoute('home');isSignedIn.setIsSignedIn(true)}}/>
                 </div>
               </form>
           </article>
