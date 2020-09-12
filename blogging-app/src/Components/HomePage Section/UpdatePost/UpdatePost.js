@@ -1,58 +1,49 @@
 import React,{useState,useContext,useEffect} from 'react';
 import axios from 'axios';
-import {postIDContext} from '../../../App';
+import {postIDContext,actionContext} from '../../../App';
 
 function UpdatePost({id}) {
 
+    const actionContextReturns=useContext(actionContext);
     const [title,setTitle]=useState("");
     const [body,setBody]=useState("");
     const [post,setPost]=useState({});
+    const url=`http://localhost:3001/api/posts/${id}`;
 
-    //const postIDContextReturns=useContext(postIDContext);
-    //const id=postIDContextReturns.id;
-    let url=`http://localhost:3001/api/posts/${id}`;
-
-    useEffect(()=>{
-        axios.default.get(url)
+    const fetchPostData=()=>{
+        axios.get(url)
         .then(response=>{
-        setPost(response.data);
-        console.log(post);
+            console.log(response.data);
+            // setTitle(response.data.title);
+            // setBody(response.data.body);
+            setPost(response.data);
         })
         .catch(error=>console.log(error));
-    },[url]);
-
-    const onSubmitHandler=(e)=>{
-        //e.preventDefault();
-        console.log(title);
-        console.log(body);
-        axios.put(url,{
-            title : title,
-            body : body,
-        })
+    }
+    const onChangeHandler=(e)=>{
+        setPost({...post,[e.target.name]:e.target.value})
+        console.log(post);
+    }
+    const onSubmitHandler=()=>{
+        axios.put(url,post)
         .then(response=>console.log(response))
         .catch(error=>console.log(error))
+
+        actionContextReturns.setAction('readOne');
     }
+
+    useEffect(()=>{
+        fetchPostData();
+    },[]);
 
     return (
         <div>
-            <article className="pa4 black-80">
-              <form onSubmit={onSubmitHandler} method="post" acceptCharset="utf-8">
-                <fieldset id="addPost" className="ba b--transparent ph0 mh0">
-                    <legend className="ph0 mh0 fw6 clip">Create your blog here</legend>
-                    <div className="mt3">
-                        <label className="db fw4 lh-copy f6" htmlFor="title">title</label>
-                        <input className="pa2 input-reset ba bg-transparent w-100 measure" value={post.title} autoComplete="on" onChange={e=>setTitle(e.target.value)}/>
-                    </div>
-                    <div className="mt3">
-                        <label className="db fw4 lh-copy f6" htmlFor="body">body</label>
-                        <textarea className="pa2 input-reset ba bg-transparent w-100 measure" value={post.body} autoComplete="on" onChange={e=>setBody(e.target.value)}/>
-                    </div>
-                </fieldset>
-                <div className="mt3">
-                    <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6" type="submit" value="Submit"/>
-                </div>
-              </form>
-          </article>
+            {id}
+            <form onSubmit={onSubmitHandler}>
+                <input name="title" onChange={e=>onChangeHandler(e)} value={post.title} required/>
+                <input name="body" onChange={e=>onChangeHandler(e)} value={post.body} required/>
+                <input type="submit"/>
+            </form>
         </div>
     )
 }

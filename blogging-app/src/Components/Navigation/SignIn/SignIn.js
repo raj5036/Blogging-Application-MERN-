@@ -1,13 +1,21 @@
 import React,{useContext} from 'react';
 import {routeContext,isSignedInContext} from '../../../App';
+import axios from 'axios';
 
 function SignIn() {
     const route=useContext(routeContext);
     const isSignedIn=useContext(isSignedInContext);
+
+    const onSubmitHandler=()=>{
+        axios.get("http://localhost:3001/api/users/signin")
+        .then(response=>console.log(response))
+        .catch(error=>console.log(error));
+    }
+
     return (
         <div>
             <article className="pa4 black-80">
-              <form action="sign-up_submit" method="get" acceptCharset="utf-8">
+              <form onSubmit={onSubmitHandler} method="get" acceptCharset="utf-8">
                 <fieldset id="signin" className="ba b--transparent ph0 mh0">
                     <legend className="ph0 mh0 fw6 clip">Sign in</legend>
                     <div className="mt3">

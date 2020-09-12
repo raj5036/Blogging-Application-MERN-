@@ -3,7 +3,7 @@ const app=express();
 const router=express.Router();
 
 //Bring in User Model
-let User=require('../Models/user');
+let User=require('../Models/user'); 
 
 //Get all users
 router.get('/',(req,res)=>{
@@ -41,12 +41,19 @@ router.post('/register',(req,res)=>{
     if(!user.name || !user.email || !user.password){
         return res.status(400).json({msg :`You must provide your name,email and a password`});
     }
-    console.log(user);
+    console.log(`user ${user}`);
 
     user.save((err)=>{
         if(err) throw new Error(err);
         else{
+            //res.cookie('name','Raj',{signed:true});
+
+            // console.log(`name ${req.cookies.name}`);
+            // console.log(`email ${req.cookies.email}`);
+            // console.log(`password ${req.cookies.password}`);
+
             res.status(200);
+            //console.log(req.signedCookies.name);
         }
         res.end();
     });

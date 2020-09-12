@@ -1,11 +1,14 @@
 const express=require('express');
 const app=express();
+const cookieParser=require('cookie-parser');
 const bodyparser=require('body-parser');
 const cors=require('cors');
 const mongoose=require('mongoose');
 
+
 app.use(bodyparser.urlencoded({extended:false}));
 app.use(bodyparser.json());
+app.use(cookieParser("secret"));
 app.use(cors());
 
 mongoose.connect('mongodb://localhost:27017/wordDroids', {useNewUrlParser: true, useUnifiedTopology: true});
